@@ -1,0 +1,78 @@
+{% extends 'base/index.html' %}
+
+{% block content %}
+
+    {% if request.user.is_authenticated %}
+
+        <p>{{request.user}}</p>
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Salir</button>
+        </form>
+
+    {% else %}
+
+        <a href="{% url 'login' %}">Ingresar</a>
+
+    {% endif %}
+
+        <h3 id="h3">Productos</h3>
+
+        <button type="button">
+            <a href="{% url 'new-product' %}">
+                Nuevo Producto
+            </a>
+        </button>
+
+        <form method="GET">
+            <input type="text" name="search" value="{{search_value}}">
+            <input type="submit" value="Buscar"></input>
+        </form>
+
+        <table>
+            <thead class="table-success">
+                <tr>
+                    <th>
+                        Codigo
+                    </th>
+                    <th>
+                        Nombre
+                    </th>
+                    <th>
+                        Desc
+                    </th>
+                    <th>
+                        Precio
+                    </th>
+                    <th>
+                        Opciones
+                    </th>
+                </tr>
+            </thead>
+            
+            <tbody>
+            {% for prod in products %}
+                <tr>
+                    <td>
+                        {{prod.code}}
+                    </td>
+                    <td>
+                        {{prod.name}}
+                    </td>
+                    <td>
+                        {{prod.description}}
+                    </td>
+                    <td>
+                        {{prod.price}}
+                    </td>
+                    <th>
+                        <button type="button"><a href="{% url 'product' prod.id %}">Ver</a></button>
+                        <button type="button"><a href="{% url 'edit-product' prod.id %}">Editar</a></button>
+                        <button type="button"><a href="{% url 'delete-product' prod.id %}">Eliminar</a></button>
+                    </th>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+{% endblock content %}
